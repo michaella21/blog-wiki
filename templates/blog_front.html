@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+   		<meta http-equiv="X-UA-Compatible" content="IE-edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap_blog.css" />
+
+		<title>My Prcatice Blog</title>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="/blog"><h1>My Practice Blog </h1></a>
+				</div>
+				<div class="col-md-4">
+					<a href="/blog/newpost" class="btn btn-primary pull-right" style="margin-top: 40px " role="button">Write</a>
+				</div>
+			</div>
+		</div>
+		
+		<br>
+		
+
+		{% for blog in blogs %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 text-left" style="font-weight: bolder" >
+				<h2>{{blog.subject}}</h2></div>
+				<div class="col-md-6 text-right"><h6>{{blog.created.strftime("%b %d, %Y")}}</h6></div>
+			</div>
+			<hr>
+			<pre class="blog-body"><p>{{blog.blog | safe}}</p></pre>
+		</div>
+		{% endfor %}
+	</body>
+</html>
+
+
+
+
+</html>

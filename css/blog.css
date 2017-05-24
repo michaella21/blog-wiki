@@ -1,0 +1,60 @@
+body{
+			font-family: sans-serif;
+			width: 700px;
+			margin:0 auto;
+			padding: 10px;
+}
+
+.error{
+			color:red;
+			margin-bottom:10px;
+		}
+
+label {
+			display: block;
+			font-size: 20px;
+		}
+
+input[type=text]{
+			width: 450px;
+			font-size: 15px;
+			padding: 2px;
+			margin-top:2px;
+			margin-bottom:20px;
+		}
+
+textarea{
+			width: 450px;
+			height: 300px;
+			font-size: 15px;
+			margin-top:2px;
+			margin-bottom:20px;
+			font-family: monospace;
+		}
+
+input[type=submit]{
+			font-size: 24px
+		}
+
+hr{
+			margin: 20px auto;
+		}
+
+
+.blog + .blog {
+			margin-top: 20px;
+
+		}
+.blog-created{
+			font-size:14px;
+			text-align:right;
+}
+.blog-subject{
+			font-weight: bold;
+			font-size: 20px;
+		}
+
+.blog-body{
+			margin-bottom: 20px;
+			font-size: 17px;
+		}

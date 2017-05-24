@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap_blog.css" />
+		<title>My Practice Blog</title>
+		
+	</head>
+
+	<body>
+		<div class="container">
+			<div class= "row">
+				<div class= "col-md-4"></div>
+				<div class= "col-md-4">
+					<h1 >new post</h1></div>
+				<div class="col-md-4">
+					<a href="/blog" class="btn btn-primary pull-right" style="margin-top: 40px " role="button">Main Page </a>
+				</div>
+			</div></div>
+
+		<form method="post">
+			<label>
+			<div class="container">
+			<div class= "row">
+				<div class= "col-md-4"></div>
+				<div class= "col-md-4"><h2>subject</h2>
+				<input type="text" name="subject" value="{{subject}}">
+			</label></div></div></div>
+
+			<label>
+			<div class="container">
+			<div class= "row">
+				<div class= "col-md-4"></div>
+				<div class= "col-md-4"><h2>blog</h2>
+				<textarea name="content">{{blog}}</textarea>	
+				<div class="error">{{error}}</div>
+				<input type="submit">
+				</div></div></div></label>
+
+			
+		</form>
+
+	</body>
+</html>
