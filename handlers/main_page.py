@@ -16,6 +16,13 @@ form ="""
 	<b style="font-size:20px"> UNIT 3</b>
 	<br> <br>
 	<a href="/unit3/asciichan"> ASCII Chan </a>
+	<br><br>
+	<b style="font-size:20px"> UNIT 4</b>
+	<br><br>
+	<a href="/unit4/signup"> Authentification exercise (user signup) </a>
+	<br>
+	<a href="/unit4/login"> Authentification exercise (login) </a>
+
 </form>
 """
 

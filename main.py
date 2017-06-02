@@ -30,6 +30,7 @@ from birthday import *
 from signup import *
 from asciichan import *
 from myblog import *
+from signup_ver2 import *
 from main_page import form, MainHandler
 
 
@@ -38,9 +39,13 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/unit2/birthday', BirthdayHandler),
 								('/unit2/birthday/thanks',ThanksHandler),
 								('/unit2/rot13', Rot13Handler), 
-								('/unit2/signup', Signup), 
+								('/unit2/signup', Signup_ver1), 
 								('/unit2/welcome', Welcome),
 								('/unit3/asciichan', Asciichan),
+								('/unit4/signup', Registration),
+								('/unit4/welcome', Welcome_ver2),
+								('/unit4/login', Login),
+								('/unit4/logout', Logout),
 								('/blog/?',BlogFront),
 								('/blog/newpost', BlogNewPost),
 								('/blog/([0-9]+)', BlogPermalink),], debug=True)
