@@ -80,11 +80,11 @@ class BaseHandler(webapp2.RequestHandler):
 		return cookies_val and check_secure_val(cookies_val)
 		#shortcut for if A and B exsit, return A and B
 
-###########################################################
+
 	def initialize(self, *a, **kw):
-        webapp2.RequestHandler.initialize(self, *a, **kw)
-        uid = self.read_secure_cookie('user_id')
-        self.user = uid and User.by_id(int(uid))
+		webapp2.RequestHandler.initialize(self, *a, **kw)
+		uid = self.read_cookies('user_id')
+		self.user = uid and User.by_id(int(uid))
 	
 
 
@@ -142,7 +142,8 @@ class Registration(Signup):
 		else:
 			u = User.register(self.username, self.password, self.email)
 			u.put()
-			BaseHandler.set_cookies(self, 'user_id', str(self.username))
+			print u.key().id()
+			BaseHandler.set_cookies(self, 'user_id', str(u.key().id()))
 			self.redirect('/unit4/welcome')
 
 class Login(BaseHandler):
@@ -215,7 +216,9 @@ class Welcome(BaseHandler):
 class Welcome_ver2(BaseHandler):
 	def get(self):
 		if BaseHandler.read_cookies(self,'user_id'):
-			username = self.request.cookies.get('user_id').split('|')[0]
+
+			uid = self.request.cookies.get('user_id').split('|')[0]
+			username = self.user.name #from initialize
 			self.render('welcome.html', username = username)
 		else: 
 			self.redirect('/unit4/signup')
