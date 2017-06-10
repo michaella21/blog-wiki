@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="/css/ascii_front.css" />
+		<link rel="stylesheet" type="text/css" href="/css/ascii.css" />
 		<title>/ascii/</title>
 		<meta http-equiv="refresh" content="TIME_TO_WAIT;URL='/unit3/asciichan'">
 
@@ -28,6 +28,10 @@
 
 			<input type="submit">
 		</form>
+
+		{% if img_url %}
+			<img class ="map" src="{{img_url}}">
+		{% endif %}
 
 		<hr>
 

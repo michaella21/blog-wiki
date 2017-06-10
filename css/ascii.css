@@ -34,6 +34,11 @@ input[type=submit]{
 hr{
 			margin: 20px auto;
 		}
+.map{
+	position: absolute;
+	right: 200px;
+	top:112px;
+}
 
 .art + .art {
 			margin-top: 20px;
