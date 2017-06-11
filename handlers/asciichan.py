@@ -43,7 +43,6 @@ def get_coords(ip):
 #look up the location by ip address		
 IP_url = "http://ip-api.com/json/"
 def get_coords(ip):
-	pass
 	url = IP_url + ip
 	content = None
 	try:
@@ -104,8 +103,10 @@ class Asciichan(Handler):
 		if title and art:
 			a = Art(title = title, art = art )
 			#lookup the user's coordinates from their IP
+			
 			coords = get_coords(self.request.remote_addr)#request ip address
 			#if we have coordinates, add them to art.
+			
 			if coords:
 				a.coords = coords
 			 

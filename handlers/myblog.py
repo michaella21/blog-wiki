@@ -8,6 +8,7 @@ from google.appengine.ext import db
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader('templates'),
 								autoescape=True)
+jinja_env.globals.update(zip=zip)
 
 
 class Handler(webapp2.RequestHandler):
@@ -31,8 +32,10 @@ class BlogFront(Handler):
 	def render_front(self,subject="", blog=""):
 		
 		blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 10")
+		b_ids = [blog.key().id() for blog in blogs]
+		
 
-		self.render("blog_front.html", subject = subject, blog = blog, blogs= blogs)
+		self.render("blog_front.html", subject = subject, blog = blog, blogs= blogs, b_ids= b_ids)
 
 	def get(self):
 		self.render_front()
@@ -68,7 +71,9 @@ class BlogNewPost(Handler):
 
 class BlogPermalink(BlogFront):
 	def get(self,b_id):
-		self.render("blog_front.html", blogs=[Blog.get_by_id(int(b_id))])
+		self.render("blog_permalink.html",blog=Blog.get_by_id(int(b_id)), b_id=b_id)
+
+#class BlogJson()blogs=[Blog.get_by_id(int(b_id))]
 
 
 

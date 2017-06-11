@@ -1,14 +1,14 @@
 {% extends "blog_base.html" %}
+
 {% block content %}
-		{% for blog, b_id in zip(blogs, b_ids)%}
-		<div class="container">
+  <div class="container">
 			<div class="row">
 				<div class="col-md-6 text-left" style="font-weight: bolder" >
-				<h2><a href= "{{'/blog/%s'%b_id}}">{{blog.subject}}</a></h2></div>
+				<h2><a href= "{{'/blog/%s'%b_id}}">{{blog.subject}}</a></h2>
+				</div>
 				<div class="col-md-6 text-right"><h6>{{blog.created.strftime("%b %d, %Y")}}</h6></div>
 			</div> 
 			<hr>
 			<pre class="blog-body"><p>{{blog.blog | safe}}</p></pre>
 		</div>
-		{% endfor %}
 {% endblock %}
