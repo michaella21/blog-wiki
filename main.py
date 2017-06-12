@@ -46,10 +46,12 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/unit4/welcome', Welcome_ver2),
 								('/unit4/login', Login),
 								('/unit4/logout', Logout),
-								('/blog/?',BlogFront),
+								('/blog/?(?:.json)?',BlogFront),
 								('/blog/newpost', BlogNewPost),
-								('/blog/([0-9]+)', BlogPermalink),], debug=True)
+								('/blog/([0-9]+)(?:.json)?', BlogPermalink),], debug=True)
 
+""" () looking for a group of things, ?: means 'don't send it to a handler as a parameter
+so in permalink case, /blog/numbers (and optionally ends with .json)
 
 
 
