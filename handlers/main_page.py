@@ -19,9 +19,14 @@ form ="""
 	<br><br>
 	<b style="font-size:20px"> UNIT 4</b>
 	<br><br>
-	<a href="/unit4/signup"> Authentification exercise (user signup) </a>
+	<a href="/blog/signup"> Authentification exercise (user signup) </a>
 	<br>
-	<a href="/unit4/login"> Authentification exercise (login) </a>
+	<a href="/blog/login"> Authentification exercise (login) </a>
+	<br><br>
+	<b style="font-size:20px"> UNIT 5</b>
+	<br><br>
+	<a href="/blog/.json"> JSON output </a>
+	
 
 </form>
 """

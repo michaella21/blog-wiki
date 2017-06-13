@@ -144,7 +144,7 @@ class Registration(Signup):
 			u.put()
 			print u.key().id()
 			BaseHandler.set_cookies(self, 'user_id', str(u.key().id()))
-			self.redirect('/unit4/welcome')
+			self.redirect('/blog/welcome')
 
 class Login(BaseHandler):
 	def get(self):
@@ -159,14 +159,14 @@ class Login(BaseHandler):
 
 		if u:
 			BaseHandler.set_cookies(self, 'user_id', str(self.username))
-			self.redirect('/unit4/welcome')
+			self.redirect('/blog/welcome')
 		else:
 			self.render('login.html', error_login = "Invalid Login")
 
 class Logout(BaseHandler):
 	def get(self):
 		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
-		self.redirect('/unit4/signup')
+		self.redirect('/blog/signup')
 
 # USER DB model 
 class User(db.Model):
@@ -221,7 +221,7 @@ class Welcome_ver2(BaseHandler):
 			username = self.user.name #from initialize
 			self.render('welcome.html', username = username)
 		else: 
-			self.redirect('/unit4/signup')
+			self.redirect('/blog/signup')
 
 
 
