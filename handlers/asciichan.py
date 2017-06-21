@@ -4,6 +4,7 @@ import jinja2
 import time
 import urllib2
 import json
+import logging
 from xml.dom import minidom
 
 from google.appengine.ext import db
@@ -60,6 +61,23 @@ def gmaps_img(points):
 	markers = '&'.join('markers=%s,%s' %(point.lat, point.lon) for point in points)
 	return GMAPS_url + markers
 
+CACHE ={} 
+
+def top_arts(update = False):
+	key = 'top'
+
+	if key in CACHE and not update:
+		arts = CACHE[key]
+	else:
+		logging.error("DB QUERY")
+		arts = db.GqlQuery("SELECT * FROM Art Order by created DESC LIMIT 10")
+
+		#need to iterate over arts and we do not want to run multiple queries. 
+		
+		arts = list(arts)
+		CACHE[key] = arts
+	return arts
+
 
 #Create entities (store art entered in Datastore)
 class Art(db.Model):
@@ -72,10 +90,7 @@ class Art(db.Model):
 
 class Asciichan(Handler):
 	def render_front(self, title="", art="", error=""):
-		arts = db.GqlQuery("SELECT * FROM Art Order by created DESC LIMIT 10")
-
-		#need to iterate over arts and we do not want to run multiple queries. 
-		arts = list(arts)
+		arts = top_arts() # cached arts by defining top_arts function
 		
 
 		#find which arts have coords
@@ -111,6 +126,11 @@ class Asciichan(Handler):
 				a.coords = coords
 			 
 			a.put()
+			#fix stale cache, it's fine here since we have only one key now (CACHE['top'])
+			#CACHE.clear() 
+			#Simple cleaing above can cause cache stampede so let's use update
+			#return the querry and update the cache
+			top_arts(True)
 			time.sleep(1.0)
 
 			self.redirect("/unit3/asciichan")

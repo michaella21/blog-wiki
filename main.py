@@ -51,7 +51,12 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/blog/([0-9]+)(?:.json)?', BlogPermalink),], debug=True)
 
 """ () looking for a group of things, ?: means 'don't send it to a handler as a parameter
-so in permalink case, /blog/numbers (and optionally ends with .json)"""
+so in permalink case, /blog/numbers (and optionally ends with .json)
+
+/blog/? will match both /blog and /blog/
+what if it can frequently face a case like "//..+..", one way to solve can be redirect the multiple slash cases to 
+single/no slash
+"""
 
 
 
