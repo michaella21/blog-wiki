@@ -7,6 +7,7 @@ import json
 import logging
 from xml.dom import minidom
 
+from google.appengine.api import memcache
 from google.appengine.ext import db
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
@@ -61,21 +62,19 @@ def gmaps_img(points):
 	markers = '&'.join('markers=%s,%s' %(point.lat, point.lon) for point in points)
 	return GMAPS_url + markers
 
-CACHE ={} 
 
 def top_arts(update = False):
 	key = 'top'
+	arts = memcache.get(key)
+	if arts is None or update:
 
-	if key in CACHE and not update:
-		arts = CACHE[key]
-	else:
 		logging.error("DB QUERY")
 		arts = db.GqlQuery("SELECT * FROM Art Order by created DESC LIMIT 10")
 
 		#need to iterate over arts and we do not want to run multiple queries. 
 		
 		arts = list(arts)
-		CACHE[key] = arts
+		memcache.set(key, arts)
 	return arts
 
 
