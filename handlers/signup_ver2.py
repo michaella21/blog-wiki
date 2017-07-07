@@ -5,14 +5,19 @@ import re
 import hmac
 import hashlib
 import random
+import time
+import logging
 from string import letters
 
 import webapp2
 import jinja2
 
 from google.appengine.ext import db
+from google.appengine.api import memcache
+
 
 secret = "mittens"
+
 
 #template_dir is the parent directory of the directory where program resides.
 template_dir = os.path.join(os.path.dirname(__file__), 'templates') 
@@ -77,16 +82,25 @@ class BaseHandler(webapp2.RequestHandler):
 
 	def read_cookies(self, name):
 		cookies_val = self.request.cookies.get(name)
-		return cookies_val and check_secure_val(cookies_val)
-		#shortcut for if A and B exsit, return A and B
+		if cookies_val and check_secure_val(cookies_val):
+			return check_secure_val(cookies_val), cookies_val
+
+	def login(self,id, name):
+		self.set_cookies('user_id', str(id))
+		#memcache.set(str(self.request.cookies.get('user_id')),name)	
+		#print memcache.get(str(self.request.cookies.get('user_id')))
+
+	def logout(self):
+		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
 
 
 	def initialize(self, *a, **kw):
 		webapp2.RequestHandler.initialize(self, *a, **kw)
-		uid = self.read_cookies('user_id')
-		self.user = uid and User.by_id(int(uid))
-	
+		if self.read_cookies('user_id'):
+			uid = int(self.read_cookies('user_id')[0])
+			self.user = User.by_id(uid)
 
+			
 
 class Signup(BaseHandler):
 	def get(self):
@@ -142,8 +156,8 @@ class Registration(Signup):
 		else:
 			u = User.register(self.username, self.password, self.email)
 			u.put()
-			print u.key().id()
-			BaseHandler.set_cookies(self, 'user_id', str(u.key().id()))
+			u_id=u.key().id()
+			self.login(u_id, self.username)
 			self.redirect('/blog/welcome')
 
 class Login(BaseHandler):
@@ -154,19 +168,21 @@ class Login(BaseHandler):
 		self.username = self.request.get("username")
 		self.password = self.request.get("password")
 
-		#if the username/pw same as we have in DB, it should return u
-		u = User.login(self.username, self.password)
+		
+		logging.error("DB QUERY")
+		u = User.login(self.username, self.password)		
 
 		if u:
-			BaseHandler.set_cookies(self, 'user_id', str(self.username))
-			self.redirect('/blog/welcome')
+			self.login(u[1],u[0])
+			self.redirect('/blog')
+		
 		else:
 			self.render('login.html', error_login = "Invalid Login")
 
 class Logout(BaseHandler):
 	def get(self):
-		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
-		self.redirect('/blog/signup')
+		self.logout()
+		self.redirect('/blog')
 
 # USER DB model 
 class User(db.Model):
@@ -198,7 +214,11 @@ class User(db.Model):
 	def login(cls, name, pw):
 		u = cls.by_name(name)
 		if u and valid_pw(name = name, pw = pw, h = u.pw_hash):
-			return u
+			#memcache.set(u.name, [u.key().id(), u.pw_hash])
+			return u.name, u.key().id()
+	
+		else:
+			return None
 
 #you can get a new key object from an ancestor path
 def users_key(group = 'default'):
@@ -216,10 +236,9 @@ class Welcome(BaseHandler):
 class Welcome_ver2(BaseHandler):
 	def get(self):
 		if BaseHandler.read_cookies(self,'user_id'):
-
-			uid = self.request.cookies.get('user_id').split('|')[0]
-			username = self.user.name #from initialize
+			username = self.user.name
 			self.render('welcome.html', username = username)
+			
 		else: 
 			self.redirect('/blog/signup')
 

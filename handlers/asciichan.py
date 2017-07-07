@@ -104,8 +104,6 @@ class Asciichan(Handler):
 
 		self.render("ascii_front.html", title = title, art = art, error = error, arts = arts, img_url = img_url)
 
-	
-
 
 	def get(self):
 		self.render_front()
