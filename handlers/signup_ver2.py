@@ -172,12 +172,15 @@ class Login(BaseHandler):
 		logging.error("DB QUERY")
 		u = User.login(self.username, self.password)		
 
-		if u:
+		if not u:
+			self.render('login.html', error_login = "Invalid Login. The username does not exist in our record.")
+		elif not u[1]:
+			self.render('login.html', error_login = "Password does not match. Please check your password.")
+		else:
 			self.login(u[1],u[0])
 			self.redirect('/blog')
-		
-		else:
-			self.render('login.html', error_login = "Invalid Login")
+
+			
 
 class Logout(BaseHandler):
 	def get(self):
@@ -216,6 +219,8 @@ class User(db.Model):
 		if u and valid_pw(name = name, pw = pw, h = u.pw_hash):
 			#memcache.set(u.name, [u.key().id(), u.pw_hash])
 			return u.name, u.key().id()
+		elif u and not valid_pw(name = name, pw = pw, h = u.pw_hash):
+			return u.name, None
 	
 		else:
 			return None
