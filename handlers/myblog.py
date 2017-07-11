@@ -21,7 +21,7 @@ def top_blogs(update = False):
 	if blogs is None or update is True: 
 		logging.error("DB QUERY")
 		blogs = db.GqlQuery("SELECT * FROM Blog ORDER BY created DESC LIMIT 10")
-		memcache.set('last_called', datetime.datetime.now())
+		memcache.set('top_last_called', datetime.datetime.now())
 		blogs = list(blogs)
 		memcache.set(key, blogs)
 
@@ -66,7 +66,7 @@ class BlogFront(Handler):
 		blogs= top_blogs()
 		b_ids = [blog.key().id() for blog in blogs]
 	
-		since_queried = (datetime.datetime.now()-memcache.get('last_called')).total_seconds()
+		since_queried = (datetime.datetime.now()-memcache.get('top_last_called')).total_seconds()
 		since_queried = int(since_queried)
 		query_time = "Queried %r seconds ago" % since_queried
 		
@@ -98,11 +98,14 @@ class BlogNewPost(Handler):
 			b = Blog(subject = subject, blog = blog)
 			
 			b.put()
+
 			
 			time.sleep(1.0)
 			top_blogs(True)
 			b_id = b.key().id()
-			
+			key = str(b_id)
+			memcache.set('page_last_called', datetime.datetime.now())
+			memcache.set(key, b)
 
 			self.redirect("/blog/%d" % b_id)
 
@@ -113,14 +116,21 @@ class BlogNewPost(Handler):
 class BlogPermalink(BlogFront):
 
 	def get(self,b_id):
-		blog = Blog.get_by_id(int(b_id))
-
-		if not blog:
-			self.error(404)
-		elif self.request.url.endswith('.json'):
+		blog = memcache.get(str(b_id))
+		if self.request.url.endswith('.json'):
 			self.render_json(blog.make_dict())
-		else:
-			self.render("blog_permalink.html",blog=blog, b_id=b_id)
+		if not blog:
+			logging.error("DB QUERY")
+			blog = Blog.get_by_id(int(b_id))
+			key = str(b_id)
+			memcache.set('page_last_called', datetime.datetime.now())
+			memcache.set(key, blog)
+			
+		
+		since_queried = (datetime.datetime.now()-memcache.get('page_last_called')).total_seconds()
+		since_queried = int(since_queried)
+		query_time = "Queried %r seconds ago" % since_queried
+		self.render("blog_permalink.html", blog=blog, b_id=b_id, query_time = query_time)
 
 
 
