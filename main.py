@@ -48,6 +48,7 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/blog/logout', Logout),
 								('/blog/?(?:.json)?',BlogFront),
 								('/blog/newpost', BlogNewPost),
+								('/blog/flush', MemcacheFlush),
 								('/blog/([0-9]+)(?:.json)?', BlogPermalink),], debug=True)
 
 """ () looking for a group of things, ?: means 'don't send it to a handler as a parameter

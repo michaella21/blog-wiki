@@ -44,6 +44,9 @@ class Handler(webapp2.RequestHandler):
 		self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
 		self.write(json_contents)
 
+	def flush(self):
+		memcache.flush_all()
+
 
 
 class Blog(db.Model):
@@ -98,14 +101,14 @@ class BlogNewPost(Handler):
 			b = Blog(subject = subject, blog = blog)
 			
 			b.put()
-
 			
 			time.sleep(1.0)
 			top_blogs(True)
 			b_id = b.key().id()
-			key = str(b_id)
-			memcache.set('page_last_called', datetime.datetime.now())
-			memcache.set(key, b)
+			key_blog = str(b_id)
+			key_called = str(b_id)+'page_last_called'
+			memcache.set(key_called, datetime.datetime.now())
+			memcache.set(key_blog, b)
 
 			self.redirect("/blog/%d" % b_id)
 
@@ -114,24 +117,29 @@ class BlogNewPost(Handler):
 			self.render_form(subject, blog, error)
 
 class BlogPermalink(BlogFront):
-
 	def get(self,b_id):
 		blog = memcache.get(str(b_id))
+		key_called = str(b_id)+'page_last_called'
 		if self.request.url.endswith('.json'):
 			self.render_json(blog.make_dict())
 		if not blog:
 			logging.error("DB QUERY")
 			blog = Blog.get_by_id(int(b_id))
-			key = str(b_id)
-			memcache.set('page_last_called', datetime.datetime.now())
-			memcache.set(key, blog)
+			key_blog = str(b_id)
+			
+			memcache.set(key_called, datetime.datetime.now())
+			memcache.set(key_blog, blog)
 			
 		
-		since_queried = (datetime.datetime.now()-memcache.get('page_last_called')).total_seconds()
+		since_queried = (datetime.datetime.now()-memcache.get(key_called)).total_seconds()
 		since_queried = int(since_queried)
 		query_time = "Queried %r seconds ago" % since_queried
 		self.render("blog_permalink.html", blog=blog, b_id=b_id, query_time = query_time)
 
+class MemcacheFlush(Handler):
+	def get(self):
+		self.flush()
+		self.redirect('/blog')
 
 
 
