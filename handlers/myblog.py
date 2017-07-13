@@ -47,6 +47,11 @@ class Handler(webapp2.RequestHandler):
 	def flush(self):
 		memcache.flush_all()
 
+	def cache_age(self, key):
+		since_queried = (datetime.datetime.now()-memcache.get(key)).total_seconds()
+		query_time = "Queried %r seconds ago" % int(since_queried)
+		return query_time
+
 
 
 class Blog(db.Model):
@@ -68,17 +73,14 @@ class BlogFront(Handler):
 	def get(self):
 		blogs= top_blogs()
 		b_ids = [blog.key().id() for blog in blogs]
-	
-		since_queried = (datetime.datetime.now()-memcache.get('top_last_called')).total_seconds()
-		since_queried = int(since_queried)
-		query_time = "Queried %r seconds ago" % since_queried
+		
 		
 
 		if self.request.url.endswith('.json'):
 			self.render_json([blog.make_dict() for blog in blogs])
 		else: #self.request.cookies.get('user_id'):
 			#u = str(str(self.request.cookies.get('user_id')))
-			self.render("blog_front.html", blogs= blogs, b_ids= b_ids, query_time = query_time)
+			self.render("blog_front.html", blogs= blogs, b_ids= b_ids, query_time = self.cache_age('top_last_called'))
 
 
 		
@@ -120,6 +122,7 @@ class BlogPermalink(BlogFront):
 	def get(self,b_id):
 		blog = memcache.get(str(b_id))
 		key_called = str(b_id)+'page_last_called'
+
 		if self.request.url.endswith('.json'):
 			self.render_json(blog.make_dict())
 		if not blog:
@@ -129,12 +132,8 @@ class BlogPermalink(BlogFront):
 			
 			memcache.set(key_called, datetime.datetime.now())
 			memcache.set(key_blog, blog)
-			
-		
-		since_queried = (datetime.datetime.now()-memcache.get(key_called)).total_seconds()
-		since_queried = int(since_queried)
-		query_time = "Queried %r seconds ago" % since_queried
-		self.render("blog_permalink.html", blog=blog, b_id=b_id, query_time = query_time)
+
+		self.render("blog_permalink.html", blog=blog, b_id=b_id, query_time = self.cache_age(key_called))
 
 class MemcacheFlush(Handler):
 	def get(self):
