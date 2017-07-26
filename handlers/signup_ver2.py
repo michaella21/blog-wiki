@@ -149,6 +149,7 @@ class Registration(Signup):
 	def done(self):
 		#check whether the user is already in the database
 		u = User.by_name(self.username)
+		print u, self.username
 		if u:
 			msg = "That user already exists."
 			self.render('signup.html',error_username = msg)

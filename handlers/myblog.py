@@ -73,9 +73,7 @@ class BlogFront(Handler):
 	def get(self):
 		blogs= top_blogs()
 		b_ids = [blog.key().id() for blog in blogs]
-		
-		
-
+				
 		if self.request.url.endswith('.json'):
 			self.render_json([blog.make_dict() for blog in blogs])
 		else: #self.request.cookies.get('user_id'):
@@ -86,12 +84,12 @@ class BlogFront(Handler):
 		
 
 class BlogNewPost(Handler):
-	def render_form(self, subject="", blog="", error=""):
+	def __render_form(self, subject="", blog="", error=""):
 
 		self.render("blog_form.html", subject= subject, blog= blog, error=error)
 
 	def get(self):
-		self.render_form()
+		self.__render_form()
 
 	def post(self):
 
@@ -116,7 +114,7 @@ class BlogNewPost(Handler):
 
 		else:
 			error = "subject and content, please"
-			self.render_form(subject, blog, error)
+			self.__render_form(subject, blog, error)
 
 class BlogPermalink(BlogFront):
 	def get(self,b_id):

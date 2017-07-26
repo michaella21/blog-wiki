@@ -25,22 +25,6 @@ class Handler(webapp2.RequestHandler):
 	def render(self, template, **kwargs):
 		self.write(self.render_str(template, **kwargs))
 
-#using api from hostip, which doesn't work any more, so use a different website with json 
-"""IP_url= "http://api.hostip.info/?ip="
-def get_coords(ip):
-	pass
-	url = IP_url +ip
-	content = None
-	try:
-		content = urllib2.urlopen(url).read()
-	except urllib2.URLError: 
-		return
-	if content:
-		#parse the xml and find the coordinate
-		d = minidom.parseString(content)
-		coords_node= d.getElementsByTagName("gml:coordinates")
-		lon, lat = str(coords_node[0].firstChild.data).split(',')
-		return db.GeoPt(lat, lon) """
 
 #look up the location by ip address		
 IP_url = "http://ip-api.com/json/"

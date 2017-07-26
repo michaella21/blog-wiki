@@ -2,30 +2,25 @@ import webapp2
 
 form ="""
 <form>
-	<a href="/blog">Web Development Blog</a>
+	<a href="/blog">Blog</a>
 	<br>
-	<br>
-	<b style="font-size:20px"> UNIT 2 </b>
+	<a href="/wiki">Wiki page</a>
+	<br><br>
+	<b style="font-size:18px"> WebDev course related </b>
 	<br> <br>
 	<a href="/unit2/rot13"> ROT 13 exercise </a>
 	<br>
 	<a href="/unit2/birthday"> Validation exercise (birthday) </a>
 	<br>
 	<a href="/unit2/signup"> Validation exercise2 (user signup) </a>
-	<br><br>
-	<b style="font-size:20px"> UNIT 3</b>
-	<br> <br>
+	<br>
 	<a href="/unit3/asciichan"> ASCII Chan </a>
-	<br><br>
-	<b style="font-size:20px"> UNIT 4</b>
-	<br><br>
+	<br>
 	<a href="/blog/signup"> Authentification exercise (user signup) </a>
 	<br>
 	<a href="/blog/login"> Authentification exercise (login) </a>
-	<br><br>
-	<b style="font-size:20px"> UNIT 5</b>
-	<br><br>
-	<a href="/blog/.json"> JSON output </a>
+	<br>
+	<a href="/blog/.json"> JSON output (API) </a>
 	
 
 </form>

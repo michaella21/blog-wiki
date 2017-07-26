@@ -19,6 +19,7 @@ import webapp2
 import cgi
 import sys
 import os
+import logging
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "handlers"))
 sys.path.append(os.path.join(os.path.dirname(__file__),"templates"))
@@ -31,9 +32,15 @@ from signup import *
 from asciichan import *
 from myblog import *
 from signup_ver2 import *
+from wiki import *
 from main_page import form, MainHandler
-
-
+"""
+def handle_404(self, request, response, exception):
+		logging.exception(exception)
+		self.redirect("/wiki/")
+		response.set_status(404)
+"""
+PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 app = webapp2.WSGIApplication([('/', MainHandler), 
 								('/unit2/birthday', BirthdayHandler),
@@ -49,14 +56,21 @@ app = webapp2.WSGIApplication([('/', MainHandler),
 								('/blog/?(?:.json)?',BlogFront),
 								('/blog/newpost', BlogNewPost),
 								('/blog/flush', MemcacheFlush),
-								('/blog/([0-9]+)(?:.json)?', BlogPermalink),], debug=True)
+								('/blog/([0-9]+)(?:.json)?', BlogPermalink),
+								('/wiki/?', WikiFront),
+								('/wiki/_edit'+PAGE_RE, WikiNewPost),
+								('/wiki'+PAGE_RE, WikiPage),
+								], debug=True)
+
+#app.error_handlers[404] = handle_404
+
 
 """ () looking for a group of things, ?: means 'don't send it to a handler as a parameter
 so in permalink case, /blog/numbers (and optionally ends with .json)
 
 /blog/? will match both /blog and /blog/
 what if it can frequently face a case like "//..+..", one way to solve can be redirect the multiple slash cases to 
-single/no slash
+single/no slash (\w+)('/wiki/(\w+)?', WikiNewPost),([a-zA-Z0-9_]*)
 """
 
 
