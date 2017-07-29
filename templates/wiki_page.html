@@ -1,0 +1,15 @@
+{% extends "wiki_base.html" %}
+{% block content %}
+  <div class="container">
+			<div class="row">
+				<div class="col-md-6 text-left" style="font-weight: bolder" >
+				<h2><a href= "{{'/wiki/%s/'%wiki.name}}">{{wiki.name}}</a></h2>
+				</div>
+				<div class="col-md-6 text-right"><h6>{{wiki.created.strftime("%b %d, %Y")}}</h6></div>
+			</div> 
+			<hr>
+			<pre class="blog-body"><p>{{wiki.content | safe}}</p></pre>
+		</div>
+
+
+{% endblock %}

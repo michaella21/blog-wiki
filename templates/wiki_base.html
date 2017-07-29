@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+   		<meta http-equiv="X-UA-Compatible" content="IE-edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+
+		<title>Wiki</title>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="/wiki"><h1>Wiki </h1></a>
+				</div>
+				
+				<div class="col-md-4">
+					<div class= "login-area">
+					<a class = "login-link" href="/blog/signup" class="btn btn-primary pull-right" role="button">signup</a> |
+					<a class = "login-link" href="/blog/login" class="btn btn-primary pull-right" role="button"> login</a>
+					|
+					<a class = "login-link" href="/" class="btn btn-primary pull-right" role="button">etc</a>
+				
+
+					<div class="post-option">
+					<a class = "login-link" href="{{'/wiki/_edit/%s'%wiki.name}}" class="btn btn-primary pull-right"  role="button"> edit</a> 
+					|
+					 <a class = "login-link" href ="/"   class="btn btn-primary pull-right" role="button"> history </a>
+				</div></div>
+					
+					
+				</div>
+			</div>
+		</div>
+		
+		<br>
+
+		{% block content %}
+		{% endblock %}
