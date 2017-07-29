@@ -1,4 +1,6 @@
 
+#Some handy functions used for blog and wiki. 
+
 import hmac
 import hashlib
 from string import letters
@@ -8,13 +10,6 @@ import random
 import re
 from string import letters
 
-
-"""
-#helper function to make import file from other directory easier
-def load_src(name, fpath):
-	import os, imp
-	return imp.load_source(name, os.path.join(os.path.dirname(__file__), fpath))
-"""
 
 secret = "mittens"
 #Password stored as 5-character salt + shat256

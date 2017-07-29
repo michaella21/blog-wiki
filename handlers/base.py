@@ -4,8 +4,6 @@ import webapp2
 import jinja2
 import os,sys
 
-
-
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(CURRENT_DIR))
 
@@ -44,10 +42,10 @@ class Handler(webapp2.RequestHandler):
 		cookies_val = self.request.cookies.get(name)
 		if cookies_val and handy.check_secure_val(cookies_val):
 			return handy.check_secure_val(cookies_val), cookies_val
+	
+	"""def check_login_status(self):
+		if read_cookies(self,nam
 	"""
-	def check_login_status(self):
-		if read_cookies(sel)
-"""
 
 
 	def login(self,id, name):

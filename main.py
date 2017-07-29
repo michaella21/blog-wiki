@@ -34,12 +34,7 @@ from myblog import *
 from signup_ver2 import *
 from wiki import *
 from main_page import form, MainHandler
-"""
-def handle_404(self, request, response, exception):
-		logging.exception(exception)
-		self.redirect("/wiki/")
-		response.set_status(404)
-"""
+
 PAGE_RE = r'(/(?:[a-zA-Z0-9_-]+/?)*)'
 
 app = webapp2.WSGIApplication([('/', MainHandler), 
